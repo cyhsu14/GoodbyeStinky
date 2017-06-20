@@ -12,19 +12,21 @@ import {Provider, connect} from 'react-redux';
 import {search} from './states/search';
 import {toast} from './states/toast';
 import {post, postForm, postItem} from './states/post-reducers';
-import {foodForm} from './states/store-reducers';
+import {foodForm, storage} from './states/store-reducers';
 
 import {StackNavigator, NavigationActions, addNavigationHelpers} from 'react-navigation';
 import RefrigerScreen from './components/RefrigerScreen';
 import PostFormScreen from './components/PostFormScreen';
 import FreezerScreen from './components/FreezerScreen';
+import RecipeScreen from './components/RecipeScreen';
 import AboutScreen from './components/AboutScreen';
 
 const AppNavigator = StackNavigator({
     Refriger: {screen: RefrigerScreen},
     Freezer: {screen: FreezerScreen},
     PostForm: {screen: PostFormScreen},
-    About: {screen: AboutScreen}
+    About: {screen: AboutScreen},
+    Recipe: {screen: RecipeScreen}
 }, {
     headerMode: 'none'
 });
@@ -70,7 +72,7 @@ const nav = (state = initialState, action) => {
 // Create Redux store
 const store = createStore(combineReducers({
     nav, search, toast,
-    post, postForm, postItem, foodForm
+    post, postForm, postItem, foodForm, storage
 }), compose(applyMiddleware(thunkMiddleware, loggerMiddleware)));
 
 export default class App extends React.Component {

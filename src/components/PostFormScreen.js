@@ -9,10 +9,12 @@ import {
 } from 'react-native';
 
 import {connect} from 'react-redux';
-import {createPost, input, inputDanger} from '../states/post-actions';
+import {createPost, input, inputDanger,listPosts} from '../states/post-actions';
 import {setToast} from '../states/toast';
-import {addStorage} from '../api/posts.js';
+// import {addStorage} from '../api/posts.js';
 import DatePicker from 'react-native-datepicker'
+import {addStorage} from '../states/store-actions';
+
 // import {Form,
 //   Separator,InputField, LinkField,
 //   SwitchField, PickerField,DatePickerField,TimePickerField
@@ -24,30 +26,35 @@ import appColors from '../styles/colors';
 // import {setToast} from '../states/toast';
 // import {getMoodIcon} from '../utilities/weather';
 
+
 const now = moment().hour(0).minute(0);
 class PostFormScreen extends React.Component {
     static propTypes = {
+        // id: PropTypes.number.isRequired,
         navigation: PropTypes.object.isRequired,
-        category: PropTypes.string.isRequired,
         name: PropTypes.string.isRequired,
-        isRefrige: PropTypes.bool.isRequired
+        category: PropTypes.string.isRequired,
+        isRefrige: PropTypes.bool.isRequired,
+        toast: PropTypes.string.isRequired,
+        dispatch: PropTypes.func.isRequired
     };
     constructor(props){
         super(props);
-        console.log('props');
-        console.log(props);
-        this.inputFoodNameEl = this.props.name;
+
+        // this.inputFoodNameEl = this.props.name;
         this.inputQuantityEL = null;
         this.inputNoteEl = null;
         this.state = {
             ...PostFormScreen.getInitFoodInfoState(props),
+            name: props.name,
             quantityToggle: false,
             unitToggle: false,
             inputFoodNameDanger: false,
-            inputQuantityDanger: false,
-            inputUnitDanger: false
+            inputQuantityDanger: false
+            // ,
+            // inputUnitDanger: false
         };
-
+        // console.log(this.state);
         this.handleGoBack = this.handleGoBack.bind(this);
         this.handleFoodNameChange = this.handleFoodNameChange.bind(this);
         this.handleSetQuantity = this.handleSetQuantity.bind(this);
@@ -61,23 +68,22 @@ class PostFormScreen extends React.Component {
         this.handleFoodInfoSubmit = this.handleFoodInfoSubmit.bind(this);
     }
     static getUnitString(unit) {
-        return unit === 'na' ? '單位' : unit;
+        return unit === '個' ? '個' : unit;
     }
     static getInitFoodInfoState(props) {
         // console.log("propssss");
         // console.log(props);
         return {
-            isRefrige: props.isRefrige,
-            isEdit: false,
-            category: props.category,
+            // isEdit: false,
+            // category: props.category,
             name: props.name,
-            id: NaN,
+            // id: NaN,
             quantity: 1,
-            unit: 'na',
+            unit: '個',
             isSetDeadline: false,
             isAlarm: false,
-            deadline: moment(),
-            alarmTime: moment(),
+            deadline: moment().format("YYYY-MM-DD"),
+            alarmTime: moment().format("YYYY-MM-DD hh:mm a"),
             text: ''
         };
     }
@@ -88,6 +94,7 @@ class PostFormScreen extends React.Component {
             deadline: moment()
         });
     }
+
     // constructor(props) {
     //     super(props);
     //
@@ -125,8 +132,9 @@ class PostFormScreen extends React.Component {
         //         </Content>
         //     </Container>
         // );
-        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl} = this.props;
-        const {name,category,quantity} = this.state;
+        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl} = this.state;
+        const {name,quantity} = this.state;
+        const category = this.props.category;
 
         return (
             <ScrollView keyboardShouldPersistTaps="always" style={{ height:200}}>
@@ -145,7 +153,7 @@ class PostFormScreen extends React.Component {
                     <List>
                         <Item underlined error={inputFoodNameDanger} >
                             <Label>{category}類: </Label>
-                            <Input placeholder={name} value={inputFoodNameEl}
+                            <Input placeholder={this.props.name} value={inputFoodNameEl}
                             onChange={this.handleFoodNameChange}/>
                         </Item>
                         <View style={{flexDirection: 'column'}}>
@@ -266,7 +274,8 @@ class PostFormScreen extends React.Component {
          </ScrollView>);
     }
     handleGoBack() {
-         this.props.navigation.goBack();
+        this.props.dispatch(listPosts(this.props.isRefrige));
+        this.props.navigation.goBack();
     }
 
     handleFoodNameChange(e){
@@ -313,7 +322,7 @@ class PostFormScreen extends React.Component {
     handleDeadlineChange(date) {
         this.setState({
           deadline: date,
-          isSetDeadline:true
+          isSetDeadline: true
         });
     // console.log("fuck");
     }
@@ -338,15 +347,19 @@ class PostFormScreen extends React.Component {
         });
     }
     handleFoodInfoSubmit(){
-        if (!this.props.name) {
+        // console.log(this.state);
+        // console.log(this.state.deadline);
+        if (!this.state.name) {
             this.setState({inputFoodNameDanger: true});
             return;
         }
-        if(this.state.quantity<=0){
+        if(this.state.quantity<=0){ //!inputQuantityDanger
+            // console.log('u');
             this.setState({inputQuantityDanger: true});
             return;
         }
         if(this.state.unit === 'na'){
+
           this.setState({
               inputUnitDanger: true,
               unitToggle: true
@@ -354,19 +367,28 @@ class PostFormScreen extends React.Component {
           return;
         }
             // console.log("this.state =");
-            // console.log(this.state);
-        const FoodDetail={
-            id: this.props.id,
+        // console.log(this.state);
+        const {dispatch} = this.props;
+        const {goBack} = this.props.navigation;
+        // let da
+        const foodDetail = {
+            isRefrige: this.props.isRefrige,
             name:this.state.name,
             category:this.props.category,
             quantity:this.state.quantity,
             unit:this.state.unit,
             isSetDeadline:this.state.isSetDeadline,
-            deadline:this.state.deadline.format("YYYY-MM-DD"),
+            deadline:this.state.deadline,
             isAlarm:this.state.isAlarm,
-            alarmTime:this.state.alarmTime.format("YYYY-MM-DD hh:mm a"),
+            alarmTime:this.state.alarmTime,
             text:this.state.text
         }
+        dispatch(createPost(foodDetail));
+        // dispatch(addStorage(foodDetail));
+        dispatch(setToast('Created.'));
+
+        goBack();
+
 
             // if(!this.props.isEdit){
             //     this.props.onPost(this.props.isRefrige,FoodDetail);

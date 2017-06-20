@@ -10,7 +10,7 @@ import moment from 'moment';
 import {ListItem, Icon} from 'native-base';
 import appColors from '../styles/colors';
 import appMetrics from '../styles/metrics';
-import {getMoodIcon} from '../utilities/weather';
+// import {getMoodIcon} from '../utilities/weather';
 import {getFoodIcon} from '../utilities/food';
 
 
@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: '#CCC'
-    },  
+    },
     text: {
         fontSize: 17,
         fontFamily: (Platform.OS === 'ios') ? 'System' : 'Roboto',

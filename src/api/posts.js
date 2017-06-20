@@ -9,6 +9,7 @@ import uuid from 'uuid/v4';
 import {AsyncStorage, AsyncString} from 'react-native';
 
 export function listStorages(isRefrige) {
+    
     if(isRefrige == true){
         return AsyncStorage.getItem("refrige").then(p =>{
             let posts = p ? JSON.parse(p) : [];
@@ -32,6 +33,7 @@ export function addStorage(foodInfo){
         id : uuid(),
         ...foodInfo
     };
+    // console.log('store');
     // console.log(newStorage);
 
     let storages;

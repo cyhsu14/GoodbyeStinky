@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import {Container, Header, Button, Icon, Left, Right, Body, Title, Drawer} from 'native-base';
-import SearchButtonWithModal from './SearchButtonWithModal';
+// import SearchButtonWithModal from './SearchButtonWithModal';
 import DrawerSideBar from './DrawerSideBar';
 
 export default class NavigationContainer extends React.Component {
@@ -37,7 +37,7 @@ export default class NavigationContainer extends React.Component {
                             <Icon name='menu' />
                         </Button></Left>
                         <Body><Title>{title}</Title></Body>
-                        <Right><SearchButtonWithModal /></Right>
+                        {/* <Right><SearchButtonWithModal /></Right> */}
                     </Header>
                     {this.props.children}
                 </Container>

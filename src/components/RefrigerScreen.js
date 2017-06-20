@@ -16,15 +16,13 @@ import NavigationContainer from './NavigationContainer';
 import {clearStorages} from '../api/posts.js';
 
 import {connect} from 'react-redux';
-import {selectFood} from '../states/store-actions';
+import {selectFood,listStorages} from '../states/store-actions';
 import {setToast} from '../states/toast';
 
 // import dismissKeyboard from 'dismissKeyboard';
 // dismissKeyboard();
 class RefrigerScreen extends React.Component {
     static propTypes = {
-        creatingPost: PropTypes.bool.isRequired,
-        creatingVote: PropTypes.bool.isRequired,
         toast: PropTypes.string.isRequired,
         dispatch: PropTypes.func.isRequired
     };
@@ -42,7 +40,10 @@ class RefrigerScreen extends React.Component {
         this.handleIcon = this.handleIcon.bind(this);
         this.getIconList = this.getIconList.bind(this);
     }
-
+    // componentDidMount(){
+    //     const {dispatch} = this.props;
+    //     dispatch(listStorages(true));
+    // }
     componentWillReceiveProps(nextProps) {
         if (nextProps.toast) {
             Toast.show({
@@ -76,15 +77,17 @@ class RefrigerScreen extends React.Component {
 //             </ParallaxNavigationContainer>
     render() {
         const {navigate} = this.props.navigation;
+
         return (
             <NavigationContainer navigate={navigate} title='Refriger'>
                 <View style={{flex: 1, justifyContent: 'center'}}>
                     <PostList  isRefrige={true}/>
                 </View>
+
                 {this.state.modalToggle &&
                     <TouchableWithoutFeedback onPress={this.handleOpenModal}>
-                        <View style={styles.fabMask}/>
-                    </TouchableWithoutFeedback>}
+                        <View style={styles.fabMask}/></TouchableWithoutFeedback>}
+
                 <Fab
                     active={false}
                     containerStyle={styles.fabContainer}
@@ -102,6 +105,7 @@ class RefrigerScreen extends React.Component {
                 onPress={() => clearStorages(true)}>
                     <Icon name="question" />
                 </Fab>
+
                 <Modal animationType='none' transparent={true} visible={this.state.modalToggle}
                     onRequestClose={() => {}} >
                     <Container>
@@ -214,11 +218,11 @@ class RefrigerScreen extends React.Component {
             case 'eggmilk':
                 l=[
                     (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","蛋")}>
-                        {getFoodIcon('crab')}</TouchableWithoutFeedback>),
+                        {getFoodIcon('egg')}</TouchableWithoutFeedback>),
                     (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","牛奶")}>
-                        {getFoodIcon('lobster')}</TouchableWithoutFeedback>),
+                        {getFoodIcon('milk')}</TouchableWithoutFeedback>),
                     (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","起司")}>
-                        {getFoodIcon('shrimp')}</TouchableWithoutFeedback>)
+                        {getFoodIcon('cheese')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'sauce':
@@ -252,8 +256,8 @@ class RefrigerScreen extends React.Component {
     }
 
     handleCreate(category, name) {
-        console.log(category);
-        console.log(name);
+        // console.log(category);
+        // console.log(name);
 
         // this.handleFabClose();
         this.props.dispatch(selectFood(category, name, true));
@@ -324,7 +328,5 @@ const styles = {
 };
 
 export default connect((state, ownProps) => ({
-    creatingPost: state.post.creatingPost,
-    creatingVote: state.post.creatingVote,
     toast: state.toast
 }))(RefrigerScreen);

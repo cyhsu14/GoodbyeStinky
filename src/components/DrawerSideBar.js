@@ -26,6 +26,10 @@ export default class DrawerSideBar extends React.Component {
                 <Icon name='snowflake' style={styles.icon}/>
                 <Text style={styles.text}>Freezer</Text>
             </Button>
+            <Button block transparent style={styles.item} onPress={() => navigate('Recipe')}>
+                <Icon name='file' style={styles.icon}/>
+                <Text style={styles.text}>Search Recipe</Text>
+            </Button>
             <Button block transparent style={styles.item} onPress={() => navigate('About')}>
                 <Icon name='paw' style={styles.icon}/>
                 <Text style={styles.text}>About</Text>

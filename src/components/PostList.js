@@ -13,8 +13,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import PostItem from './PostItem';
 
 import {connect} from 'react-redux';
-import {listPosts, listMorePosts} from '../states/post-actions';
-
+import {listPosts} from '../states/post-actions';
+// import {listStorages} from '../states/store-actions';
 var i=1;
 var foods={
     valid: false,
@@ -58,16 +58,16 @@ var foods={
 
 class PostList extends React.Component {
     static propTypes = {
-        searchText: PropTypes.string.isRequired,
-        listingPosts: PropTypes.bool.isRequired,
-        listingMorePosts: PropTypes.oneOfType([
-            PropTypes.string,
-            PropTypes.number
-        ]),
+        // searchText: PropTypes.string.isRequired,
+        // listingPosts: PropTypes.bool.isRequired,
+        // listingMorePosts: PropTypes.oneOfType([
+        //     PropTypes.string,
+        //     PropTypes.number
+        // ]),
         posts: PropTypes.array.isRequired,
-        hasMorePosts: PropTypes.bool.isRequired,
+        // hasMorePosts: PropTypes.bool.isRequired,
         dispatch: PropTypes.func.isRequired,
-        scrollProps: PropTypes.object
+        // scrollProps: PropTypes.object
     };
 
     constructor(props) {
@@ -88,10 +88,10 @@ class PostList extends React.Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        const {searchText, dispatch, posts} = this.props;
-        if (searchText !== nextProps.searchText) {
-            dispatch(listPosts(this.props.isRefrige));       //need to be changed later
-        }
+        const {dispatch, posts} = this.props;
+        // if (searchText !== nextProps.searchText) {
+        //     dispatch(listPosts(this.props.isRefrige));       //need to be changed later
+        // }
         if (posts !== nextProps.posts) {
             // console.log("next");
             // console.log(nextProps.posts);
@@ -103,7 +103,8 @@ class PostList extends React.Component {
 
     render() {
         const {listingPosts, hasMorePosts, posts, scrollProps} = this.props;
-        // console.log("in postlist!~~");
+        console.log("in postlist!~~");
+        console.log(posts);
         // console.log("in postlist!~~");
         // console.log("in postlist!~~");
         if(posts.length>0){
@@ -133,7 +134,7 @@ class PostList extends React.Component {
     }
 
     handleRefresh() {
-        const {dispatch, searchText} = this.props;
+        const {dispatch} = this.props;
         dispatch(listPosts(this.props.isRefrige));      //need to be changed later
     }
 
@@ -162,9 +163,9 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state, ownProps) => ({
-    searchText: state.search.searchText,
+    // searchText: state.search.searchText,
     listingPosts: state.post.listingPosts,
-    listingMorePosts: state.post.listingMorePosts,
-    posts: state.post.posts,
-    hasMorePosts: state.post.hasMore
+    // listingMorePosts: state.post.listingMorePosts,
+    posts: state.post.posts
+    // hasMorePosts: state.post.hasMore
 }))(PostList);

@@ -16,7 +16,7 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}></Image>;
 
-        case 'vegetable':
+        case  'vegetable':
             return<Image source={require('../images/vegetable.png')} style={styles.moodIcon}></Image>;
         case 'meat':
             return<Image source={require('../images/meat.png')} style={styles.moodIcon}></Image>;
@@ -34,6 +34,18 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                             // </Image>;
+        case '高麗菜':
+            return<Image source={require('../images/cabbage.png')} style={styles.moodIcon}></Image>;
+        case '紅蘿蔔':
+            return<Image source={require('../images/carrot.png')} style={styles.moodIcon}></Image>;
+        case '花椰菜':
+            return<Image source={require('../images/cauliflower.png')} style={styles.moodIcon}></Image>;
+        case '辣椒':
+            return<Image source={require('../images/chili.png')} style={styles.moodIcon}></Image>;
+        case '玉米':
+            return<Image source={require('../images/corn.png')} style={styles.moodIcon}></Image>;
+        case '茄子':
+            return<Image source={require('../images/eggplant.png')} style={styles.moodIcon}></Image>;
         case 'cabbage':
             return<Image source={require('../images/cabbage.png')} style={styles.moodIcon}></Image>;
         case 'carrot':
@@ -50,6 +62,12 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('./images/.png')} style={styles.moodIcon}>
                             // </Image>;
+        case '培根':
+            return<Image source={require('../images/bacon.png')} style={styles.moodIcon}></Image>;
+        case '牛肉':
+            return<Image source={require('../images/beef.png')} style={styles.moodIcon}></Image>;
+        case '雞肉':
+            return<Image source={require('../images/chicken.png')} style={styles.moodIcon}></Image>;
         case 'bacon':
             return<Image source={require('../images/bacon.png')} style={styles.moodIcon}></Image>;
         case 'beef':
@@ -60,6 +78,20 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                             // </Image>;
+        case '蛤蜊':
+            return<Image source={require('../images/clams.png')} style={styles.moodIcon}></Image>;
+        case '螃蟹':
+            return<Image source={require('../images/crab.png')} style={styles.moodIcon}></Image>;
+        case '魚':
+            return<Image source={require('../images/fish.png')} style={styles.moodIcon}></Image>;
+        case '龍蝦':
+            return<Image source={require('../images/lobster.png')} style={styles.moodIcon}></Image>;
+        case '章魚':
+            return<Image source={require('../images/octopus.png')} style={styles.moodIcon}></Image>;
+        case '海鮮':
+            return<Image source={require('../images/seafood.png')} style={styles.moodIcon}></Image>;
+        case '蝦子':
+            return<Image source={require('../images/shrimp.png')} style={styles.moodIcon}></Image>;
         case 'clams':
             return<Image source={require('../images/clams.png')} style={styles.moodIcon}></Image>;
         case 'crab':
@@ -78,6 +110,18 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                     // </Image>;
+        case '蘋果':
+            return<Image source={require('../images/apple.png')} style={styles.moodIcon}></Image>;
+        case '香蕉':
+            return<Image source={require('../images/banana.png')} style={styles.moodIcon}></Image>;
+        case '葡萄':
+            return<Image source={require('../images/grape.png')} style={styles.moodIcon}></Image>;
+        case '橘子':
+            return<Image source={require('../images/orange.png')} style={styles.moodIcon}></Image>;
+        case '草莓':
+            return<Image source={require('../images/strawberry.png')} style={styles.moodIcon}></Image>;
+        case '西瓜':
+            return<Image source={require('../images/watermelon.png')} style={styles.moodIcon}></Image>;
         case 'apple':
             return<Image source={require('../images/apple.png')} style={styles.moodIcon}></Image>;
         case 'banana':
@@ -94,6 +138,12 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                     // </Image>;
+        case '起司':
+            return<Image source={require('../images/cheese.png')} style={styles.moodIcon}></Image>;
+        case '蛋':
+            return<Image source={require('../images/egg.png')} style={styles.moodIcon}></Image>;
+        case '牛奶':
+            return<Image source={require('../images/milk.png')} style={styles.moodIcon}></Image>;
         case 'cheese':
             return<Image source={require('../images/cheese.png')} style={styles.moodIcon}></Image>;
         case 'egg':
@@ -104,6 +154,12 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                     // </Image>;
+        case '辣醬':
+            return<Image source={require('../images/chilisauce.png')} style={styles.moodIcon}></Image>;
+        case '果醬':
+            return<Image source={require('../images/jam.png')} style={styles.moodIcon}></Image>;
+        case '番茄醬':
+            return<Image source={require('../images/ketchup.png')} style={styles.moodIcon}></Image>;
         case 'chilisauce':
             return<Image source={require('../images/chilisauce.png')} style={styles.moodIcon}></Image>;
         case 'jam':

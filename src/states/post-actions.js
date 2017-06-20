@@ -1,6 +1,6 @@
 import {
     listStorages as listPostsFromApi,
-    createPost as createPostFromApi,
+    addStorage as createPostFromApi,
     createVote as createVoteFromApi
 } from '../api/posts.js';
 
@@ -59,10 +59,10 @@ function endCreateVote(post) {
     };
 }
 
-export function listPosts(searchText) {
+export function listPosts(isRefrige) {
     return (dispatch, getState) => {
         dispatch(startListPosts());
-        return listPostsFromApi(searchText).then(posts => {
+        return listPostsFromApi(isRefrige).then(posts => {
             // console.log("endlist~");
             // console.log(posts);
             // console.log(endListPosts(posts));
@@ -86,16 +86,19 @@ export function listMorePosts(searchText, start) {
     };
 };
 
-export function createPost(mood, text) {
+export function createPost(foodInfo) {
     return (dispatch, getState) => {
         dispatch(startCreatePost());
 
-        return createPostFromApi(mood, text).then(post => {
-            dispatch(endCreatePost(post));
-        }).catch(err => {
-            dispatch(endCreatePost())
-            console.error('Error creating post', err);
-        });
+        return dispatch(endCreatePost(createPostFromApi(foodInfo)));
+        // dispatch(startCreatePost());
+        //
+        // return createPostFromApi(foodInfo).then(post => {
+        //     dispatch(endCreatePost(post));
+        // }).catch(err => {
+        //     dispatch(endCreatePost())
+        //     console.error('Error creating post', err);
+        // });
     };
 };
 

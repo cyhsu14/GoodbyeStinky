@@ -2,19 +2,19 @@
 
 const initPostState = {
     listingPosts: false,
-    listingMorePosts: undefined, // id of post from which to start
+    // listingMorePosts: undefined, // id of post from which to start
     posts: [],
-    hasMore: true,
-    creatingPost: false,
-    creatingVote: false
+    // hasMore: true,
+    // creatingPost: false,
+    // creatingVote: false
 };
 export function post(state = initPostState, action) {
     switch (action.type) {
         case '@POST/START_LIST_POSTS':
             return {
                 ...state,
-                listingPosts: true,
-                listingMorePosts: undefined
+                listingPosts: true
+                // listingMorePosts: undefined
             };
         case '@POST/END_LIST_POSTS':
             if (!action.posts)
@@ -25,8 +25,8 @@ export function post(state = initPostState, action) {
             return {
                 ...state,
                 listingPosts: false,
-                posts: action.posts,
-                hasMore: action.posts.length > 0
+                posts: action.posts
+                // hasMore: action.posts.length > 0
             };
         case '@POST/START_LIST_MORE_POSTS':
             return {
@@ -54,6 +54,7 @@ export function post(state = initPostState, action) {
                 };
             var newPosts = state.posts.slice();
             newPosts.unshift(action.post);
+            // console.log(newPosts);
             return {
                 ...state,
                 creatingPost: false,
