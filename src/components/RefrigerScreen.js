@@ -11,12 +11,19 @@ import PostList from './PostList';
 import PostItem from './PostItem';
 import NavigationContainer from './NavigationContainer';
 
-import {clearStorages} from '../api/posts.js';
+import {clearStorages,listStorages} from '../api/posts.js';
 
 import {connect} from 'react-redux';
 import {selectFood} from '../states/store-actions';
 import {setToast} from '../states/toast';
 import {listPosts} from '../states/post-actions';
+
+import PopupDialog, { DialogTitle } from 'react-native-popup-dialog';
+import moment from 'moment';
+
+var warn;
+const timeOutFood = [];
+
 // import dismissKeyboard from 'dismissKeyboard';
 // dismissKeyboard();
 class RefrigerScreen extends React.Component {
@@ -31,13 +38,16 @@ class RefrigerScreen extends React.Component {
 
         this.state = {
             modalToggle: false,
-            categoryState: 'vegetable'
+            categoryState: 'vegetable',
+            showDialog: false
         };
 
         this.handleCreate = this.handleCreate.bind(this);
         this.handleOpenModal = this.handleOpenModal.bind(this);
         this.handleIcon = this.handleIcon.bind(this);
         this.getIconList = this.getIconList.bind(this);
+        this.handleAlarm = this.handleAlarm.bind(this);
+        warn = setInterval(this.handleAlarm,5000);
     }
     componentDidMount(){
         const {dispatch} = this.props;
@@ -57,6 +67,34 @@ class RefrigerScreen extends React.Component {
 
     render() {
         const {navigate} = this.props.navigation;
+        var checkShow = false;
+        var checkTime;
+        console.log('in render');
+        console.log(this.state.showDialog);
+        timeOutFood.map(function(data, j) {
+            checkShow = data.isShowDialog;
+            checkTime = data.alarmTime;
+        });
+
+        if(checkTime < moment().format("YYYY-MM-DD HH:mm a")){
+                timeOutFood.splice(0,timeOutFood.length);
+            }
+
+        if(this.state.showDialog === false && checkShow === false) {  //initial state & when dialog has showed
+            warn = setInterval(this.handleAlarm,5000);
+            console.log('warn');
+            console.log(warn);
+        }
+
+        let children = timeOutFood.map(posts => (
+            <View key={posts.id} style={{margin: 5, padding: 2}}>
+                <View style={{alignItems: 'center'}}>
+                    {getFoodIcon(posts.name)}
+                    <Text style={styles.text}>{posts.name}</Text>
+                </View>
+                <View><Text>{posts.deadline}</Text></View>
+            </View>
+        ));
         return (
             <NavigationContainer navigate={navigate} title='Refriger'>
                 <View style={{flex: 1}}>
@@ -129,7 +167,32 @@ class RefrigerScreen extends React.Component {
                             </View>
                         </View>
                     </Container>
-                </Modal>
+                </Modal><PopupDialog
+                    dialogTitle={<DialogTitle title="快過期啦"/>}
+                    ref={(popupDialog) => { this.popupDialog = popupDialog; }}
+                    show={this.state.showDialog}
+                    height= {350}
+                    onShowed = {() => {
+                        var check;
+                        timeOutFood.map(function(data, j) {
+                            data.isShowDialog = true;
+                            check = data.isShowDialog
+                        });
+                    }}
+                    onDismissed = {() => {
+                        this.setState({
+                            showDialog: false
+                        });
+
+                    }}
+                >
+                    <View style={{alignSelf: 'center'}}>
+                        <View>
+                            <Image source={require('../images/timeout_red.png')}  style={styles.dialog}/>
+                       </View>
+                        <View style={styles.dialogItem}>{children}</View>
+                    </View>
+                </PopupDialog>
             </NavigationContainer>
         );
     }
@@ -139,85 +202,85 @@ class RefrigerScreen extends React.Component {
             case 'vegetable':
                 // console.log(categoryState);
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","高麗菜")}>
+                    (<TouchableWithoutFeedback key={0} onPress={()=>this.handleCreate("蔬菜","高麗菜")}>
                         {getFoodIcon('cabbage')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","紅蘿蔔")}>
+                    (<TouchableWithoutFeedback key={1} onPress={()=>this.handleCreate("蔬菜","紅蘿蔔")}>
                         {getFoodIcon('carrot')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","茄子")}>
+                    (<TouchableWithoutFeedback key={2} onPress={()=>this.handleCreate("蔬菜","茄子")}>
                         {getFoodIcon('eggplant')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","辣椒")}>
+                    (<TouchableWithoutFeedback key={3} onPress={()=>this.handleCreate("蔬菜","辣椒")}>
                         {getFoodIcon('chili')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","玉米")}>
+                    (<TouchableWithoutFeedback key={4} onPress={()=>this.handleCreate("蔬菜","玉米")}>
                         {getFoodIcon('corn')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蔬菜","花椰菜")}>
+                    (<TouchableWithoutFeedback key={5} onPress={()=>this.handleCreate("蔬菜","花椰菜")}>
                         {getFoodIcon('cauliflower')}</TouchableWithoutFeedback>)
                 ];
                 return l;
 
             case 'meat':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","雞肉")}>
+                    (<TouchableWithoutFeedback key={6} onPress={()=>this.handleCreate("肉","雞肉")}>
                         {getFoodIcon('chicken')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","培根")}>
+                    (<TouchableWithoutFeedback key={7} onPress={()=>this.handleCreate("肉","培根")}>
                         {getFoodIcon('bacon')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","牛肉")}>
+                    (<TouchableWithoutFeedback key={8} onPress={()=>this.handleCreate("肉","牛肉")}>
                         {getFoodIcon('beef')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'seafood':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","螃蟹")}>
+                    (<TouchableWithoutFeedback key={9} onPress={()=>this.handleCreate("海鮮","螃蟹")}>
                         {getFoodIcon('crab')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","龍蝦")}>
+                    (<TouchableWithoutFeedback key={10} onPress={()=>this.handleCreate("海鮮","龍蝦")}>
                         {getFoodIcon('lobster')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","蝦子")}>
+                    (<TouchableWithoutFeedback key={11} onPress={()=>this.handleCreate("海鮮","蝦子")}>
                         {getFoodIcon('shrimp')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","魚")}>
+                    (<TouchableWithoutFeedback key={12} onPress={()=>this.handleCreate("海鮮","魚")}>
                         {getFoodIcon('fish')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","章魚")}>
+                    (<TouchableWithoutFeedback key={13} onPress={()=>this.handleCreate("海鮮","章魚")}>
                         {getFoodIcon('octopus')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("海鮮","蛤蜊")}>
+                    (<TouchableWithoutFeedback key={14} onPress={()=>this.handleCreate("海鮮","蛤蜊")}>
                         {getFoodIcon('clams')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'fruit':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","草莓")}>
+                    (<TouchableWithoutFeedback key={15} onPress={()=>this.handleCreate("水果","草莓")}>
                         {getFoodIcon('strawberry')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","橘子")}>
+                    (<TouchableWithoutFeedback key={16} onPress={()=>this.handleCreate("水果","橘子")}>
                         {getFoodIcon('orange')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","蘋果")}>
+                    (<TouchableWithoutFeedback key={17} onPress={()=>this.handleCreate("水果","蘋果")}>
                         {getFoodIcon('apple')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","葡萄")}>
+                    (<TouchableWithoutFeedback key={18} onPress={()=>this.handleCreate("水果","葡萄")}>
                         {getFoodIcon('grape')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","西瓜")}>
+                    (<TouchableWithoutFeedback key={19} onPress={()=>this.handleCreate("水果","西瓜")}>
                         {getFoodIcon('watermelon')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("水果","香蕉")}>
+                    (<TouchableWithoutFeedback key={20} onPress={()=>this.handleCreate("水果","香蕉")}>
                         {getFoodIcon('banana')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'eggmilk':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","蛋")}>
+                    (<TouchableWithoutFeedback key={21} onPress={()=>this.handleCreate("蛋/乳製品","蛋")}>
                         {getFoodIcon('egg')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","牛奶")}>
+                    (<TouchableWithoutFeedback key={22} onPress={()=>this.handleCreate("蛋/乳製品","牛奶")}>
                         {getFoodIcon('milk')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("蛋/乳製品","起司")}>
+                    (<TouchableWithoutFeedback key={23} onPress={()=>this.handleCreate("蛋/乳製品","起司")}>
                         {getFoodIcon('cheese')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'sauce':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("調味料","番茄醬")}>
+                    (<TouchableWithoutFeedback key={24} onPress={()=>this.handleCreate("調味料","番茄醬")}>
                         {getFoodIcon('ketchup')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("調味料","果醬")}>
+                    (<TouchableWithoutFeedback key={25} onPress={()=>this.handleCreate("調味料","果醬")}>
                         {getFoodIcon('jam')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("調味料","辣椒醬")}>
+                    (<TouchableWithoutFeedback key={26} onPress={()=>this.handleCreate("調味料","辣椒醬")}>
                         {getFoodIcon('chilisauce')}</TouchableWithoutFeedback>)
                 ];
                 return l;
             case 'cooked':
-                return (<TouchableWithoutFeedback onPress={()=>this.handleCreate("熟食","熟食")}>
+                return (<TouchableWithoutFeedback key={27} onPress={()=>this.handleCreate("熟食","熟食")}>
                     {getFoodIcon('cooked')}</TouchableWithoutFeedback>);
             default:
                 return l;
@@ -244,6 +307,54 @@ class RefrigerScreen extends React.Component {
         this.setState({
             modalToggle:!this.state.modalToggle
         });
+    }
+    handleAlarm() {
+        //in freezer
+        var showAlarm = false;
+        listStorages(true).then(p=>{
+            p.map(function(posts, i){
+                if(posts.isAlarm) {
+                    //console.log(posts.alarmTime);
+                    //console.log(moment().format("YYYY-MM-DD HH:mm a"));
+                    if((posts.alarmTime == moment().format("YYYY-MM-DD HH:mm a")) //|| ((posts.deadline == moment().format("YYYY-MM-DD") && moment().format("hh:mm a") == "10:02 pm"))
+                        ){
+                        clearInterval(warn);
+                        var checkNew = true;
+                        timeOutFood.map(function(data, j) {
+                            if(data.id === posts.id) { //has new
+                                checkNew = false;
+                            }
+                        })
+                        if(checkNew === true){
+                            showAlarm = true;
+                            var newAlarmFood = {
+                                id : posts.id,
+                                name: posts.name,
+                                deadline: posts.deadline,
+                                isShowDialog: false
+                            }
+                            var same = false;
+                            timeOutFood.map(function(data, j) {
+                                if(data.id === newAlarmFood.id){
+                                    same=true;
+                                }
+                            })
+                            if(!same){
+                                timeOutFood.push(newAlarmFood);
+                            }
+                        }
+                    }
+                }
+            })
+        }).then(p=>{
+            if(showAlarm){
+                this.setState({
+                    showDialog: true
+                });
+                Debugger;
+            }
+        });
+
     }
 }
 
@@ -293,15 +404,26 @@ const styles = {
     },
     wrap: {
         marginTop: 20,
-        alignSelf:'center',
-        alignContent: 'center',
+        paddingHorizontal: 15,
         flex: 1,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        justifyContent: 'space-around'
     },
     closeIcon: {
         flexDirection: 'row-reverse',
         marginTop: 5,
         marginLeft: 7
+    },
+    dialog: {
+        width: 200,
+        height: 160,
+        alignSelf: 'center'
+    },
+    dialogItem: {
+        flexDirection: 'row',
+        flex:1,
+        justifyContent: 'center',
+        marginTop: 20
     }
 };
 

@@ -16,7 +16,8 @@ import PostItem from './PostItem';
 
 import {connect} from 'react-redux';
 import {listPosts} from '../states/post-actions';
-import PopupDialog, {DialogTitle}from 'react-native-popup-dialog';
+import PopupDialog, {DialogTitle,SlideAnimation,ScaleAnimation,
+    FadeInAnimation}from 'react-native-popup-dialog';
 import moment from 'moment';
 import {deleteStorages} from '../api/posts.js';
 import {setToast} from '../states/toast';
@@ -103,27 +104,28 @@ class PostList extends React.Component {
                 />
                 <PopupDialog
                     style={styles.popup}
-                    dialogTitle={<DialogTitle title="食物資訊" />}
+                    dialogTitle={<DialogTitle titleTextStyle={styles.text} title='食物筆記本'/>}
                     ref={(popupDialog)=>{this.popupDialog = popupDialog; }}
                     show={this.state.checkFood}
+                    dialogstyle={styles.text}
                     onDismissed={ () => {this.setState({checkFood: false});} }
+                    dialogAnimation  = {new ScaleAnimation()}
                 >
-                    <View style={{alignSelf:'center'}}>
-
-                        <Text>{foodInformation.category}類：{foodInformation.name}</Text>
-                        <Text>數量單位：{foodInformation.quantity}{foodInformation.unit}</Text>
+                    <View style={{alignItems:'center'}}>
+                        <Text style={styles.text}>{foodInformation.category}類：{foodInformation.name}</Text>
+                        <Text style={styles.text}>數量單位：{foodInformation.quantity}{foodInformation.unit}</Text>
                         {foodInformation.isSetDeadline?
-                            <Text>有效期限：{foodInformation.deadline}</Text>
+                            <Text style={styles.text}>有效期限：{foodInformation.deadline}</Text>
                             :
-                            <Text>有效期限：--</Text>
+                            <Text style={styles.text}>有效期限：關</Text>
                         }
                         {foodInformation.isAlarm?
-                            <Text>提醒：開 {foodInformation.alarmTime}</Text>
+                            <Text style={styles.text}>提醒： {foodInformation.alarmTime}</Text>
                             :
-                            <Text>提醒：關</Text>
+                            <Text style={styles.text}>提醒：關</Text>
                         }
-                        <Text>備註：{foodInformation.text}</Text>
-                        <Button Iconleft danger rounded
+                        <Text style={styles.text}>備註：{foodInformation.text}</Text>
+                        <Button Iconleft danger rounded style={{alignSelf:'center'}}
                             onPress={ () => this.handleFoodInfoDelete(foodInformation.isRefrige,foodInformation.id)}>
                             <Icon name='trash' style={{fontSize:24}}/>
                             <Text style={{fontSize:24}}> Delete </Text>
@@ -203,6 +205,10 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: '#CCC'
+    },
+    text:{
+        fontSize:24,
+        alignSelf:'center'
     }
 });
 

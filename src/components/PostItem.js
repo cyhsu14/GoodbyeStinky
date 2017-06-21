@@ -20,7 +20,7 @@ class PostItem extends React.Component {
         super(props);
 
 
-        this.handleVote = this.handleVote.bind(this);
+        // this.handleVote = this.handleVote.bind(this);
     }
 
     render() {
@@ -30,12 +30,12 @@ class PostItem extends React.Component {
         if(this.props.valid != false){
             return (
                 // <View>
-                    <View onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
-                            <View style={styles.wrap}>
-                                {getFoodIcon(this.props.name)}
-                                <Text style={styles.text}>{this.props.name}</Text>
-                            </View>
-                    </View>
+                <View onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
+                        <View style={styles.wrap}>
+                            {getFoodIcon(this.props.name)}
+                            <Text style={styles.text}>{this.props.name}</Text>
+                        </View>
+                </View>
 
 
                 // </View>
@@ -48,13 +48,13 @@ class PostItem extends React.Component {
 
 
 
-    handleVote(vote) {
-        const {dispatch, id} = this.props;
-        dispatch(createVote(id, vote)).then(() => {
-            dispatch(setToast('Voted.'));
-        });
-        dispatch(setTooltipToggle(id, false));
-    }
+    // handleVote(vote) {
+    //     const {dispatch, id} = this.props;
+    //     dispatch(createVote(id, vote)).then(() => {
+    //         dispatch(setToast('Voted.'));
+    //     });
+    //     dispatch(setTooltipToggle(id, false));
+    // }
 }
 
 /*

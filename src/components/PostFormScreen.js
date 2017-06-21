@@ -349,17 +349,18 @@ class PostFormScreen extends React.Component {
         dispatch(createPost(foodDetail)).then(()=>{
             dispatch(listPosts(foodDetail.isRefrige));
             dispatch(setToast('Created.'));
+            let where = foodDetail.isRefrige ? '冰箱' : '冷凍庫';
             if(foodDetail.isAlarm){
                 d = moment(foodDetail.alarmTime, 'YYYY-MM-DD HH:mm a').toDate();
                 PushNotification.localNotificationSchedule({
-                  message: `你的${foodDetail.name}過期啦！`,
+                  message: `你在${where}的${foodDetail.name}過期啦！`,
                   date: d//new Date(Date.now() + (5 * 1000))  // in 60 secs
                 });
             }
             else if(foodDetail.isSetDeadline){
                 d = moment(foodDetail.deadline, 'YYYY-MM-DD HH:mm a').toDate();
                 PushNotification.localNotificationSchedule({
-                  message: `你的${foodDetail.name}過期啦！`,
+                  message: `你在${where}的${foodDetail.name}過期啦！`,
                   date: d//new Date(Date.now() + (5 * 1000))  // in 60 secs
                 });
             }
