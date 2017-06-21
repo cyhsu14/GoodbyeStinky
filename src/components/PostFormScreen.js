@@ -12,7 +12,8 @@ import {connect} from 'react-redux';
 import {createPost, input, inputDanger,listPosts} from '../states/post-actions';
 import {setToast} from '../states/toast';
 // import {addStorage} from '../api/posts.js';
-import DatePicker from 'react-native-datepicker'
+import DatePicker from 'react-native-datepicker';
+import PushNotification from 'react-native-push-notification';
 // import {addStorage} from '../states/store-actions';
 
 // import {Form,
@@ -71,13 +72,8 @@ class PostFormScreen extends React.Component {
         return unit === '個' ? '個' : unit;
     }
     static getInitFoodInfoState(props) {
-        // console.log("propssss");
-        // console.log(props);
         return {
-            // isEdit: false,
-            // category: props.category,
             name: props.name,
-            // id: NaN,
             quantity: 1,
             unit: '個',
             isSetDeadline: false,
@@ -95,43 +91,8 @@ class PostFormScreen extends React.Component {
         });
     }
 
-    // constructor(props) {
-    //     super(props);
-    //
-    //     this.handleGoBack = this.handleGoBack.bind(this);
-    //     this.handleInputChange = this.handleInputChange.bind(this);
-    //     this.handleCreatPost = this.handleCreatPost.bind(this);
-    // }
 
     render() {
-        // const {mood, inputValue, inputDanger} = this.props;
-        // return (
-        //     <Container>
-        //         <Header>
-        //             <Left><Button transparent
-        //                 onPress={this.handleGoBack}>
-        //                 <Icon name='arrow-left'  style={{fontSize: 24}} />
-        //             </Button></Left>
-        //             <Body><Title>New Post</Title></Body>
-        //             <Right><Button transparent onPress={this.handleCreatPost}>
-        //                 <Icon name='check'  style={{fontSize: 24}} />
-        //             </Button></Right>
-        //         </Header>
-        //         <Content style={styles.content}>
-        //             {getMoodIcon({
-        //                 group: mood,
-        //                 size: 120,
-        //                 style: styles.mood
-        //             })}
-        //             <Item regular error={inputDanger} style={styles.item}>
-        //                 {/* <Label>What's on your mind?</Label> */}
-        //                 <Input autoFocus multiline maxLength={1024} placeholder="What's on your mind?"
-        //                      style={styles.input} value={inputValue}
-        //                      onChange={this.handleInputChange} />
-        //             </Item>
-        //         </Content>
-        //     </Container>
-        // );
         const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl,inputQuantityDanger} = this.state;
         const {name,quantity} = this.state;
         const category = this.props.category;
@@ -231,7 +192,7 @@ class PostFormScreen extends React.Component {
                              style={{width: 200}}
                              date={this.state.alarmTime}
                              mode="datetime"
-                             format="YYYY-MM-DD HH:mm"
+                             format="YYYY-MM-DD HH:mm a"
                              minimumDate={now}
                              confirmBtnText="Confirm"
                              cancelBtnText="Cancel"
@@ -383,9 +344,25 @@ class PostFormScreen extends React.Component {
             alarmTime:this.state.alarmTime,
             text:this.state.text
         }
+        let d = new Date(Date.now());
+
         dispatch(createPost(foodDetail)).then(()=>{
             dispatch(listPosts(foodDetail.isRefrige));
             dispatch(setToast('Created.'));
+            if(foodDetail.isAlarm){
+                d = moment(foodDetail.alarmTime, 'YYYY-MM-DD HH:mm a').toDate();
+                PushNotification.localNotificationSchedule({
+                  message: `你的${foodDetail.name}過期啦！`,
+                  date: d//new Date(Date.now() + (5 * 1000))  // in 60 secs
+                });
+            }
+            else if(foodDetail.isSetDeadline){
+                d = moment(foodDetail.deadline, 'YYYY-MM-DD HH:mm a').toDate();
+                PushNotification.localNotificationSchedule({
+                  message: `你的${foodDetail.name}過期啦！`,
+                  date: d//new Date(Date.now() + (5 * 1000))  // in 60 secs
+                });
+            }
         });
         goBack();
 

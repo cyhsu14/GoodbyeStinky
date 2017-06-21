@@ -74,91 +74,38 @@ export function clearStorages(isRefrige){
     }
 }
 
-// function _listStorages() {
-//     AsyncStorage.getItem("foods").then(p =>{
-//         let posts = p ? JSON.parse(p) : [];
-//         console.log(posts);
-//         return posts;
-//     });
-// }
+export function deleteStorages(isRefrige, id){
+    // let fuckingWorld=[];
+    let listStore = [];
+    if(isRefrige){
+        AsyncStorage.getItem("refrige").then(p =>{
+            let posts = p ? JSON.parse(p) : [];
+            posts.map(function(post, i){
+                if(post.id != id){
+                    listStore=[
+                        post,
+                        ...listStore
+                    ]
+                }
 
-// // Simulated server-side code
-// function _listPosts(searchText = '') {
-//     AsyncStorage.getItem("foods").then(p =>{
-//         let posts = p ? JSON.parse(p) : [];
-//         console.log("from listposts");
-//         console.log(posts);
-//         return posts;
-//     });
-// };
-
-
-// const postBaseUrl = 'http://weathermood-production.us-west-2.elasticbeanstalk.com/api';
-
-// export function listPosts(searchText = '', start) {
-//     let url = `${postBaseUrl}/posts`;
-//     let query = [];
-//     if (searchText)
-//         query.push(`searchText=${searchText}`);
-//     if (start)
-//         query.push(`start=${start}`);
-//     if (query.length)
-//         url += '?' + query.join('&');
-
-//     console.log(`Making GET request to: ${url}`);
-
-//     return fetch(url, {
-//         headers: {
-//             'Accept': 'application/json'
-//         }
-//     }).then(res => {
-//         if (res.status !== 200)
-//             throw new Error(`Unexpected response code: ${res.status}`);
-//         console.log("listpost~~~");
-//         let qweqw = res.json();
-//         console.log(qweqw);
-//         return qweqw;
-//     });
-// }
-
-// export function createPost(mood, text) {
-//     let url = `${postBaseUrl}/posts`;
-
-//     console.log(`Making POST request to: ${url}`);
-
-//     return fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json',
-//             'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify({
-//             mood,
-//             text
-//         })
-//     }).then(function(res) {
-//         if (res.status !== 200)
-//             throw new Error(`Unexpected response code: ${res.status}`);
-
-//         return res.json();
-//     });
-// }
-
-
-// export function createVote(id, mood) {
-//     let url = `${postBaseUrl}/posts/${id}/${mood.toLowerCase()}Votes`;
-
-//     console.log(`Making POST request to: ${url}`);
-
-//     return fetch(url, {
-//         method: 'POST',
-//         headers: {
-//             'Accept': 'application/json'
-//         }
-//     }).then(function(res) {
-//         if (res.status !== 200)
-//             throw new Error(`Unexpected response code: ${res.status}`);
-
-//         return res.json();
-//     });
-// }
+            })
+            AsyncStorage.setItem("refrige", JSON.stringify(listStore));
+        });
+    }
+    else{
+        AsyncStorage.getItem("freezer").then(p =>{
+            let posts = p ? JSON.parse(p) : [];
+            posts.map(function(post, i){
+                if(post.id != id){
+                    listStore=[
+                        post,
+                        ...listStore
+                    ]
+                }
+                // console.log("fuckckFREEZER");
+                // console.log(listStore);
+            })
+            AsyncStorage.setItem("freezer", JSON.stringify(listStore));
+        });
+    }
+}

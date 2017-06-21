@@ -30,12 +30,12 @@ class PostItem extends React.Component {
         if(this.props.valid != false){
             return (
                 // <View>
-                    <TouchableOpacity onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
+                    <View onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
                             <View style={styles.wrap}>
                                 {getFoodIcon(this.props.name)}
                                 <Text style={styles.text}>{this.props.name}</Text>
                             </View>
-                    </TouchableOpacity>
+                    </View>
 
 
                 // </View>

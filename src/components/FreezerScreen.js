@@ -58,7 +58,7 @@ class FreezerScreen extends React.Component {
         const {navigate} = this.props.navigation;
         return (
             <NavigationContainer navigate={navigate} title='Freezer'>
-                <View style={{flex: 1, justifyContent: 'center'}}>
+                <View style={{flex: 1}}>
                     <PostList  isRefrige={false}/>
                 </View>
 
@@ -80,8 +80,9 @@ class FreezerScreen extends React.Component {
                 containerStyle={styles.fabContainer}
                 style={styles.fab}
                 position="bottomLeft"
-                onPress={() => {clearStorages(false);this.props.dispatch(listPosts(false));}}>
-                    <Icon name="question" />
+                onPress={() => {clearStorages(false);this.props.dispatch(listPosts(false));
+                                this.props.dispatch(setToast('Clear Items.'));}}>
+                    <Icon name="bomb" />
                 </Fab>
 
                 <Modal animationType='none' transparent={true} visible={this.state.modalToggle}
@@ -153,11 +154,11 @@ class FreezerScreen extends React.Component {
 
             case 'meat':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","雞肉")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","雞肉")}>
                         {getFoodIcon('chicken')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","培根")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","培根")}>
                         {getFoodIcon('bacon')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","牛肉")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","牛肉")}>
                         {getFoodIcon('beef')}</TouchableWithoutFeedback>)
                 ];
                 return l;

@@ -86,8 +86,6 @@ class PostList extends React.Component {
     render() {
         const {listingPosts, posts, scrollProps} = this.props;
         // this.props.dispatch(listPosts(this.props.isRefrige));
-        console.log("in postlist!~~");
-        console.log(posts);
         if(posts.length>0){
             return (
             <View >
@@ -145,9 +143,6 @@ class PostList extends React.Component {
 
     }
     handleCheckFoodInfo(p) {
-        console.log('aaaaaaaaaa');
-        console.log(foodInformation);
-        console.log(foodInformation.isRefrige);
         this.setState({
             checkFood: true
         });

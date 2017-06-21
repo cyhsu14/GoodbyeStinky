@@ -59,7 +59,7 @@ class RefrigerScreen extends React.Component {
         const {navigate} = this.props.navigation;
         return (
             <NavigationContainer navigate={navigate} title='Refriger'>
-                <View style={{flex: 1, justifyContent: 'center'}}>
+                <View style={{flex: 1}}>
                     <PostList  isRefrige={true}/>
                 </View>
 
@@ -81,8 +81,10 @@ class RefrigerScreen extends React.Component {
                 containerStyle={styles.fabContainer}
                 style={styles.fab}
                 position="bottomLeft"
-                onPress={() => {clearStorages(true);this.props.dispatch(listPosts(true));}}>
-                    <Icon name="question" />
+                onPress={() => {clearStorages(true);
+                                this.props.dispatch(listPosts(true)).then((p)=>this.props.dispatch(setToast('Clear Items.')));
+                                }}>
+                    <Icon name="bomb" />
                 </Fab>
 
                 <Modal animationType='none' transparent={true} visible={this.state.modalToggle}
@@ -154,11 +156,11 @@ class RefrigerScreen extends React.Component {
 
             case 'meat':
                 l=[
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","雞肉")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","雞肉")}>
                         {getFoodIcon('chicken')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","培根")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","培根")}>
                         {getFoodIcon('bacon')}</TouchableWithoutFeedback>),
-                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉類","牛肉")}>
+                    (<TouchableWithoutFeedback onPress={()=>this.handleCreate("肉","牛肉")}>
                         {getFoodIcon('beef')}</TouchableWithoutFeedback>)
                 ];
                 return l;
@@ -235,10 +237,7 @@ class RefrigerScreen extends React.Component {
     }
 
     handleCreate(category, name) {
-        // console.log(category);
-        // console.log(name);
 
-        // this.handleFabClose();
         this.props.dispatch(selectFood(category, name, true));
         this.props.navigation.navigate('PostForm');
         // this.props.navigation.navigate('FoodInfo');

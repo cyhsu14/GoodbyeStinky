@@ -25,6 +25,9 @@ export default class AboutScreen extends React.Component {
                     <Text style={{fontSize:20, fontFamily:'sans-condensed'}}>
                         This app is developed by Bang-kang, Guan-yu, Yi-ting and Ching-yu.
                     </Text>
+                    <Text>
+
+                    </Text>
                 </View>
             </NavigationContainer>
         );
