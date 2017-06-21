@@ -132,7 +132,7 @@ class PostFormScreen extends React.Component {
         //         </Content>
         //     </Container>
         // );
-        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl} = this.state;
+        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl,inputQuantityDanger} = this.state;
         const {name,quantity} = this.state;
         const category = this.props.category;
 
@@ -157,7 +157,7 @@ class PostFormScreen extends React.Component {
                             onChange={this.handleFoodNameChange}/>
                         </Item>
                         <View style={{flexDirection: 'column'}}>
-                            <Item style={{flex:1}}>
+                            <Item style={{flex:1}} error={inputQuantityDanger}>
                                 <Label>數量單位:</Label>
                                 <Input ref='quantity' placeholder='1'
                                   keyboardType="numeric"
