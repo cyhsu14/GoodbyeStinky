@@ -75,10 +75,9 @@ export function clearStorages(isRefrige){
 }
 
 export function deleteStorages(isRefrige, id){
-    // let fuckingWorld=[];
-    let listStore = [];
+    let listStore=[];
     if(isRefrige){
-        AsyncStorage.getItem("refrige").then(p =>{
+        return AsyncStorage.getItem("refrige").then(p =>{
             let posts = p ? JSON.parse(p) : [];
             posts.map(function(post, i){
                 if(post.id != id){
@@ -88,12 +87,12 @@ export function deleteStorages(isRefrige, id){
                     ]
                 }
 
-            })
-            AsyncStorage.setItem("refrige", JSON.stringify(listStore));
+            });
+            return AsyncStorage.setItem("refrige", JSON.stringify(listStore));
         });
     }
     else{
-        AsyncStorage.getItem("freezer").then(p =>{
+        return AsyncStorage.getItem("freezer").then(p =>{
             let posts = p ? JSON.parse(p) : [];
             posts.map(function(post, i){
                 if(post.id != id){
@@ -104,8 +103,8 @@ export function deleteStorages(isRefrige, id){
                 }
                 // console.log("fuckckFREEZER");
                 // console.log(listStore);
-            })
-            AsyncStorage.setItem("freezer", JSON.stringify(listStore));
+            });
+            return AsyncStorage.setItem("freezer", JSON.stringify(listStore));
         });
     }
 }

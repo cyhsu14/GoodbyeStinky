@@ -18,10 +18,13 @@ import {connect} from 'react-redux';
 import {listPosts} from '../states/post-actions';
 import PopupDialog, {DialogTitle}from 'react-native-popup-dialog';
 import moment from 'moment';
-
+import {deleteStorages} from '../api/posts.js';
+import {setToast} from '../states/toast';
+import {Button} from 'native-base';
 // import {listStorages} from '../states/store-actions';
 
 var foodInformation = {
+    id: '',
     isRefrige: true,
     name:'',
     category:'',
@@ -35,16 +38,8 @@ var foodInformation = {
 }
 class PostList extends React.Component {
     static propTypes = {
-        // searchText: PropTypes.string.isRequired,
-        // listingPosts: PropTypes.bool.isRequired,
-        // listingMorePosts: PropTypes.oneOfType([
-        //     PropTypes.string,
-        //     PropTypes.number
-        // ]),
         posts: PropTypes.array.isRequired,
-        // hasMorePosts: PropTypes.bool.isRequired,
         dispatch: PropTypes.func.isRequired,
-        // scrollProps: PropTypes.object
     };
 
     constructor(props) {
@@ -54,11 +49,12 @@ class PostList extends React.Component {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)
             }),
-
+            checkFood: false
         };
 
         this.handleRefresh = this.handleRefresh.bind(this);
         this.handleCheckFoodInfo = this.handleCheckFoodInfo.bind(this);
+        this.handleFoodInfoDelete = this.handleFoodInfoDelete.bind(this);
         // this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
@@ -127,6 +123,11 @@ class PostList extends React.Component {
                             <Text>提醒：關</Text>
                         }
                         <Text>備註：{foodInformation.text}</Text>
+                        <Button Iconleft danger rounded
+                            onPress={ () => this.handleFoodInfoDelete(foodInformation.isRefrige,foodInformation.id)}>
+                            <Icon name='trash' style={{fontSize:24}}/>
+                            <Text style={{fontSize:24}}> Delete </Text>
+                        </Button>
                     </View>
                 </PopupDialog>
             </View>
@@ -146,6 +147,7 @@ class PostList extends React.Component {
         this.setState({
             checkFood: true
         });
+        foodInformation.id= p.id;
         foodInformation.isRefrige = p.isRefrige;
         foodInformation.name = p.name;
         foodInformation.category = p.category;
@@ -156,6 +158,7 @@ class PostList extends React.Component {
         foodInformation.isAlarm = p.isAlarm;
         foodInformation.alarmTime = p.alarmTime;
         foodInformation.text = p.text;
+
         // console.log('foodInformation');
     }
 
@@ -163,11 +166,16 @@ class PostList extends React.Component {
         this.props.dispatch(listPosts(this.props.isRefrige));      //need to be changed later
     }
 
-    // handleLoadMore() {
-    //     const {listingMorePosts, dispatch, posts, searchText} = this.props;
-    //     const start = posts[posts.length - 1].id;
-    //     dispatch(listMorePosts(searchText, start));
-    // }
+    handleFoodInfoDelete(isRefrige,id){
+        deleteStorages(isRefrige, id).then(()=>{
+            this.props.dispatch(listPosts(isRefrige));
+            this.props.dispatch(setToast('Delete Successful!'));
+        });
+        this.setState({
+            checkFood: false
+        });
+
+    }
 }
 const styles = StyleSheet.create({
     list: {
@@ -199,10 +207,7 @@ const styles = StyleSheet.create({
 });
 
 export default connect((state, ownProps) => ({
-    // searchText: state.search.searchText,
     listingPosts: state.post.listingPosts,
     creatingPost: state.post.creatingPost,
-    // listingMorePosts: state.post.listingMorePosts,
     posts: state.post.posts
-    // hasMorePosts: state.post.hasMore
 }))(PostList);
