@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, StyleSheet, Text, Platform, Image, TouchableHighlight} from 'react-native';
+import {View, StyleSheet, Text, Platform, Image, TouchableHighlight,TouchableOpacity} from 'react-native';
 
 import {connect} from 'react-redux';
 import {createVote, setTooltipToggle, toggleTooltip} from '../states/post-actions';
 import {setToast} from '../states/toast';
 
 import moment from 'moment';
-import {ListItem, Icon} from 'native-base';
+import {ListItem,List, Icon,Card,CardItem} from 'native-base';
 import appColors from '../styles/colors';
 import appMetrics from '../styles/metrics';
 // import {getMoodIcon} from '../utilities/weather';
@@ -16,11 +16,10 @@ import {getFoodIcon} from '../utilities/food';
 
 class PostItem extends React.Component {
 
-
     constructor(props) {
         super(props);
 
-        this.handleTooltipToggle = this.handleTooltipToggle.bind(this);
+
         this.handleVote = this.handleVote.bind(this);
     }
 
@@ -30,14 +29,16 @@ class PostItem extends React.Component {
         // console.log(getFoodIcon(this.props.name1));
         if(this.props.valid != false){
             return (
-                <ListItem onPress={this.handleTooltipToggle} style={StyleSheet.flatten(styles.listItem)}>
-                    <View>
-                        <View style={styles.wrap}>
-                            {getFoodIcon(this.props.name)}
-                            <Text style={styles.text}>{this.props.name}</Text>
-                        </View>
-                    </View>
-                </ListItem>
+                // <View>
+                    <TouchableOpacity onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
+                            <View style={styles.wrap}>
+                                {getFoodIcon(this.props.name)}
+                                <Text style={styles.text}>{this.props.name}</Text>
+                            </View>
+                    </TouchableOpacity>
+
+
+                // </View>
             );
         }
         else {
@@ -45,9 +46,7 @@ class PostItem extends React.Component {
         }
     }
 
-    handleTooltipToggle() {
-        this.props.dispatch(toggleTooltip(this.props.id));
-    }
+
 
     handleVote(vote) {
         const {dispatch, id} = this.props;
@@ -67,7 +66,8 @@ const styles = StyleSheet.create({
     listItem: {
         flexDirection: 'column',
         alignItems: 'stretch',
-        width: 100
+        width: 100,
+        margin:12
     },
     nullList:{
         display:'none'
@@ -85,7 +85,10 @@ const styles = StyleSheet.create({
     },
     wrap: {
         justifyContent: 'center',
-        padding: 5,
+        paddingLeft: 0,
+        paddingRight: 0,
+        marginRight: 0,
+        marginLeft: 0,
         width: 100,
         height: 100,
         backgroundColor: '#F6F6F6',
@@ -101,6 +104,7 @@ const styles = StyleSheet.create({
         marginTop: 4,
         marginBottom: 4
     }
+
 });
 
 export default connect((state, ownProps) => ({

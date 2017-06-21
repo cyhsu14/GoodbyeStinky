@@ -5,7 +5,9 @@ import {
     ListView,
     RefreshControl,
     StyleSheet,
-    Fab
+    Fab,
+    Text,
+    TouchableOpacity
 } from 'react-native';
 import InfiniteScrollView from 'react-native-infinite-scroll-view';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -14,48 +16,23 @@ import PostItem from './PostItem';
 
 import {connect} from 'react-redux';
 import {listPosts} from '../states/post-actions';
+import PopupDialog, {DialogTitle}from 'react-native-popup-dialog';
+import moment from 'moment';
+
 // import {listStorages} from '../states/store-actions';
-var i=1;
-var foods={
-    valid: false,
-    id1 :"",
-    name1:"",
-    category1:"",
-    quantity1:NaN,
-    unit1:"",
-    isSetDeadline1:false,
-    deadline1:"",
-    isAlarm1:false,
-    alarmDate1:"" ,
-    alarmTime1:"" ,
-    text1:"",
-    isRefrige: false,
 
-    id2 :"",
-    name2:"",
-    category2:"",
-    quantity2:NaN,
-    unit2:"",
-    isSetDeadline2:false,
-    deadline2:"",
-    isAlarm2:false,
-    alarmDate2:"" ,
-    alarmTime2:"" ,
-    text2:"",
-
-    id3 :"",
-    name3:"",
-    category3:"",
-    quantity3:NaN,
-    unit3:"",
-    isSetDeadline3:false,
-    deadline3:"",
-    isAlarm3:false,
-    alarmDate3:"" ,
-    alarmTime3:"" ,
-    text3:""
+var foodInformation = {
+    isRefrige: true,
+    name:'',
+    category:'',
+    quantity:1,
+    unit:'個',
+    isSetDeadline:false,
+    deadline:moment().format("YYYY-MM-DD"),
+    isAlarm:false,
+    alarmTime:moment().format("YYYY-MM-DD hh:mm a"),
+    text:''
 }
-
 class PostList extends React.Component {
     static propTypes = {
         // searchText: PropTypes.string.isRequired,
@@ -76,10 +53,12 @@ class PostList extends React.Component {
         this.state = {
             dataSource: new ListView.DataSource({
                 rowHasChanged: (r1, r2) => JSON.stringify(r1) !== JSON.stringify(r2)
-            })
+            }),
+
         };
 
         this.handleRefresh = this.handleRefresh.bind(this);
+        this.handleCheckFoodInfo = this.handleCheckFoodInfo.bind(this);
         // this.handleLoadMore = this.handleLoadMore.bind(this);
     }
 
@@ -109,22 +88,50 @@ class PostList extends React.Component {
         // this.props.dispatch(listPosts(this.props.isRefrige));
         console.log("in postlist!~~");
         console.log(posts);
-        // console.log("in postlist!~~");
-        // console.log("in postlist!~~");
         if(posts.length>0){
             return (
-            <ListView
-                refreshControl={
-                    <RefreshControl refreshing={listingPosts} onRefresh={this.handleRefresh} />
-                }
-                dataSource={this.state.dataSource}
-                renderRow={(p) => {
-                    return <PostItem {...p} />;
-                }}
-                contentContainerStyle={styles.list}
-                // ref={(el) => this.listEl = el}
-                // {...scrollProps}
-            />
+            <View >
+                <ListView
+                    refreshControl={
+                        <RefreshControl refreshing={listingPosts} onRefresh={this.handleRefresh} />
+                    }
+                    dataSource={this.state.dataSource}
+                    renderRow={(p) => {
+                        return (
+                            <TouchableOpacity onPress={()=>this.handleCheckFoodInfo(p)}>
+                            <PostItem {...p} />
+                        </TouchableOpacity>
+                    );
+                    }}
+                    contentContainerStyle={styles.list}
+                    // ref={(el) => this.listEl = el}
+                    // {...scrollProps}
+                />
+                <PopupDialog
+                    style={styles.popup}
+                    dialogTitle={<DialogTitle title="食物資訊" />}
+                    ref={(popupDialog)=>{this.popupDialog = popupDialog; }}
+                    show={this.state.checkFood}
+                    onDismissed={ () => {this.setState({checkFood: false});} }
+                >
+                    <View style={{alignSelf:'center'}}>
+
+                        <Text>{foodInformation.category}類：{foodInformation.name}</Text>
+                        <Text>數量單位：{foodInformation.quantity}{foodInformation.unit}</Text>
+                        {foodInformation.isSetDeadline?
+                            <Text>有效期限：{foodInformation.deadline}</Text>
+                            :
+                            <Text>有效期限：--</Text>
+                        }
+                        {foodInformation.isAlarm?
+                            <Text>提醒：開 {foodInformation.alarmTime}</Text>
+                            :
+                            <Text>提醒：關</Text>
+                        }
+                        <Text>備註：{foodInformation.text}</Text>
+                    </View>
+                </PopupDialog>
+            </View>
             );
         }
         else{
@@ -135,6 +142,26 @@ class PostList extends React.Component {
             );
         }
 
+
+    }
+    handleCheckFoodInfo(p) {
+        console.log('aaaaaaaaaa');
+        console.log(foodInformation);
+        console.log(foodInformation.isRefrige);
+        this.setState({
+            checkFood: true
+        });
+        foodInformation.isRefrige = p.isRefrige;
+        foodInformation.name = p.name;
+        foodInformation.category = p.category;
+        foodInformation.quantity = p.quantity;
+        foodInformation.unit = p.unit;
+        foodInformation.isSetDeadline = p.isSetDeadline;
+        foodInformation.deadline = p.deadline;
+        foodInformation.isAlarm = p.isAlarm;
+        foodInformation.alarmTime = p.alarmTime;
+        foodInformation.text = p.text;
+        // console.log('foodInformation');
     }
 
     handleRefresh() {
@@ -161,7 +188,18 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 60,
         textAlign: 'center',
-        margin: 10,
+        margin: 10
+    },
+    popup: {
+        position: 'absolute',
+        justifyContent: 'center',
+        width: 30,
+        height: 30,
+        backgroundColor: '#F6F6F6',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderRadius: 5,
+        borderColor: '#CCC'
     }
 });
 
