@@ -21,21 +21,46 @@ export default class AboutScreen extends React.Component {
         const {navigate} = this.props.navigation;
         return (
             <NavigationContainer navigate={navigate} title='About'>
-                <View style={styles.textStyle}>
-                    <Text style={{fontSize:20, fontFamily:'sans-condensed'}}>
-                        This app is developed by Bang-kang, Guan-yu, Yi-ting and Ching-yu.
+                <View>
+                    <Text style={styles.textStyle}>
+                        This app is developed by
                     </Text>
-                    <Text>
-
-                    </Text>
+                    <View style={styles.viewStyle}>
+                        <Image source={require('../images/BKChen.jpg')} style={styles.img}></Image>
+                        <Text style={styles.textStyle}> Bang-kang Chen</Text>
+                    </View>
+                    <View style={styles.viewStyle}>
+                        <Image source={require('../images/YiTing.jpg')} style={styles.img}></Image>
+                        <Text style={styles.textStyle}> Yi-Ting Ciou</Text>
+                    </View>
+                    <View style={styles.viewStyle}>
+                        <Image source={require('../images/Chingyu.jpg')} style={styles.img}></Image>
+                        <Text style={styles.textStyle}> Ching-Yu Hsu</Text>
+                    </View>
+                    <View style={styles.viewStyle}>
+                        <Image source={require('../images/handsomeGaryChen.jpg')} style={styles.img}></Image>
+                        <Text style={styles.textStyle}> HANDSOME Gary Chen</Text>
+                    </View>
                 </View>
             </NavigationContainer>
         );
     }
 }
 const styles = {
-    textStyle: {
-        marginTop: 10,
-        marginLeft: 10
+    viewStyle:{
+        flexDirection:'row',
+        alignItems: 'center',
+        marginLeft: 20,
+        marginVertical: 20
+    },
+    textStyle:{
+        fontSize:24,
+        fontFamily:'sans-condensed',
+        marginLeft: 10,
+        marginTop:10
+    },
+    img: {
+        width: 100,
+        height: 100
     }
 };

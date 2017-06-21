@@ -22,7 +22,7 @@ import moment from 'moment';
 import {deleteStorages} from '../api/posts.js';
 import {setToast} from '../states/toast';
 import {Button} from 'native-base';
-// import {listStorages} from '../states/store-actions';
+
 
 var foodInformation = {
     id: '',
@@ -104,28 +104,28 @@ class PostList extends React.Component {
                 />
                 <PopupDialog
                     style={styles.popup}
-                    dialogTitle={<DialogTitle titleTextStyle={styles.text} title='食物筆記本'/>}
+                    dialogTitle={<DialogTitle titleTextStyle={styles.textTitle} title='食物筆記本'/>}
                     ref={(popupDialog)=>{this.popupDialog = popupDialog; }}
                     show={this.state.checkFood}
                     dialogstyle={styles.text}
                     onDismissed={ () => {this.setState({checkFood: false});} }
-                    dialogAnimation  = {new ScaleAnimation()}
+                    height={340}
                 >
-                    <View style={{alignItems:'center'}}>
-                        <Text style={styles.text}>{foodInformation.category}類：{foodInformation.name}</Text>
-                        <Text style={styles.text}>數量單位：{foodInformation.quantity}{foodInformation.unit}</Text>
-                        {foodInformation.isSetDeadline?
+                    <View style={{alignItems:'flex-start', marginLeft:20}}>
+                        <View style={styles.iconStyle}><Icon name='list-alt' style={{fontSize:24}}/><Text style={styles.text}>{foodInformation.category}類：{foodInformation.name}</Text></View>
+                        <View style={styles.iconStyle}><Icon name='sort-numeric-asc' style={{fontSize:24}}/><Text style={styles.text}>數量單位：{foodInformation.quantity}{foodInformation.unit}</Text></View>
+                        <View style={styles.iconStyle}><Icon name='calendar' style={{fontSize:24}}/>{foodInformation.isSetDeadline?
                             <Text style={styles.text}>有效期限：{foodInformation.deadline}</Text>
                             :
                             <Text style={styles.text}>有效期限：關</Text>
-                        }
-                        {foodInformation.isAlarm?
+                        }</View>
+                        <View style={styles.iconStyle}><Icon name='clock-o' style={{fontSize:24}}/>{foodInformation.isAlarm?
                             <Text style={styles.text}>提醒： {foodInformation.alarmTime}</Text>
                             :
                             <Text style={styles.text}>提醒：關</Text>
-                        }
-                        <Text style={styles.text}>備註：{foodInformation.text}</Text>
-                        <Button Iconleft danger rounded style={{alignSelf:'center'}}
+                        }</View>
+                        <View style={styles.iconStyle}><Icon name='commenting-o' style={{fontSize:24}}/><Text style={styles.text}>備註：{foodInformation.text}</Text></View>
+                        <Button Iconleft danger rounded style={{alignSelf:'center',marginTop:20}}
                             onPress={ () => this.handleFoodInfoDelete(foodInformation.isRefrige,foodInformation.id)}>
                             <Icon name='trash' style={{fontSize:24}}/>
                             <Text style={{fontSize:24}}> Delete </Text>
@@ -172,10 +172,11 @@ class PostList extends React.Component {
         deleteStorages(isRefrige, id).then(()=>{
             this.props.dispatch(listPosts(isRefrige));
             this.props.dispatch(setToast('Delete Successful!'));
+            this.setState({
+                checkFood: false
+            });
         });
-        this.setState({
-            checkFood: false
-        });
+
 
     }
 }
@@ -198,7 +199,7 @@ const styles = StyleSheet.create({
     popup: {
         position: 'absolute',
         justifyContent: 'center',
-        width: 30,
+        width: 60,
         height: 30,
         backgroundColor: '#F6F6F6',
         alignItems: 'center',
@@ -206,9 +207,22 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderColor: '#CCC'
     },
+    textTitle:{
+        fontSize:24,
+        alignSelf:'flex-start',
+        marginLeft:10,
+        color: '#4268A5'
+    },
     text:{
         fontSize:24,
-        alignSelf:'center'
+        alignSelf:'flex-start',
+        marginLeft:10
+    },
+    iconStyle:{
+        flexDirection:'row',
+        alignItems:'center',
+        alignSelf:'flex-start',
+        marginTop:5
     }
 });
 

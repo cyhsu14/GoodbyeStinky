@@ -316,7 +316,8 @@ class RefrigerScreen extends React.Component {
                 if(posts.isAlarm) {
                     //console.log(posts.alarmTime);
                     //console.log(moment().format("YYYY-MM-DD HH:mm a"));
-                    if((posts.alarmTime == moment().format("YYYY-MM-DD HH:mm a")) //|| ((posts.deadline == moment().format("YYYY-MM-DD") && moment().format("hh:mm a") == "10:02 pm"))
+                    if((posts.alarmTime == moment().format("YYYY-MM-DD HH:mm a")
+                    || ((posts.deadline == moment().format("YYYY-MM-DD") && moment().format("hh:mm a") == "10:02 pm"))) //
                         ){
                         clearInterval(warn);
                         var checkNew = true;
@@ -351,7 +352,6 @@ class RefrigerScreen extends React.Component {
                 this.setState({
                     showDialog: true
                 });
-                Debugger;
             }
         });
 

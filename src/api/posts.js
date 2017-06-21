@@ -80,31 +80,24 @@ export function deleteStorages(isRefrige, id){
         return AsyncStorage.getItem("refrige").then(p =>{
             let posts = p ? JSON.parse(p) : [];
             posts.map(function(post, i){
-                if(post.id != id){
-                    listStore=[
-                        post,
-                        ...listStore
-                    ]
+                if(post.id == id){
+                    posts.splice(i,1);
                 }
 
             });
-            return AsyncStorage.setItem("refrige", JSON.stringify(listStore));
+            return AsyncStorage.setItem("refrige", JSON.stringify(posts));
         });
     }
     else{
         return AsyncStorage.getItem("freezer").then(p =>{
             let posts = p ? JSON.parse(p) : [];
             posts.map(function(post, i){
-                if(post.id != id){
-                    listStore=[
-                        post,
-                        ...listStore
-                    ]
+                if(post.id == id){
+                    posts.splice(i,1);
                 }
-                // console.log("fuckckFREEZER");
-                // console.log(listStore);
+
             });
-            return AsyncStorage.setItem("freezer", JSON.stringify(listStore));
+            return AsyncStorage.setItem("freezer", JSON.stringify(posts));
         });
     }
 }

@@ -37,7 +37,7 @@ export default class RecipeScreen extends React.Component {
                             <Icon name='chevron-left'  style={{fontSize: 20}} />
                         </Button>
                          <Button transparent
-                             onPress={this.goBack.bind(this)}>
+                             onPress={this.goForward.bind(this)}>
                              <Icon name='chevron-right'  style={{fontSize: 20}} />
                          </Button>
                     </View>
@@ -49,11 +49,11 @@ export default class RecipeScreen extends React.Component {
     }
     goBack(){
         this.refs[WEBVIEW_REF].goBack();
-        }
+    }
 
-        goForward(){
-        this.refs[WEBVIEW_REF].goForward();
-       }
+    goForward(){
+    this.refs[WEBVIEW_REF].goForward();
+   }
 }
 const styles = StyleSheet.create({
    container: {

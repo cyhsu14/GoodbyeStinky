@@ -12,7 +12,7 @@ import appColors from '../styles/colors';
 import appMetrics from '../styles/metrics';
 // import {getMoodIcon} from '../utilities/weather';
 import {getFoodIcon} from '../utilities/food';
-
+import * as Animatable from 'react-native-animatable';
 
 class PostItem extends React.Component {
 
@@ -30,12 +30,14 @@ class PostItem extends React.Component {
         if(this.props.valid != false){
             return (
                 // <View>
-                <View onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
+
+                <Animatable.View ref="view" animation="fadeIn" useNativeDriver delay={500}
+                    onPress={this.handleCheckFoodInfo} style={StyleSheet.flatten(styles.listItem)} >
                         <View style={styles.wrap}>
                             {getFoodIcon(this.props.name)}
                             <Text style={styles.text}>{this.props.name}</Text>
                         </View>
-                </View>
+                </Animatable.View>
 
 
                 // </View>

@@ -2,7 +2,7 @@ import {Platform} from 'react-native';
 
 export default appMetrics = {
     fontSizeBase: 15,
-    toastDuration: 1000, // in ms
+    toastDuration: 1500, // in ms
     parallaxHeaderMaxHeight: 300,
     parallaxHeaderMinHeight: (Platform.OS === 'ios') ? 64 : 56,
     get parallaxHeaderScrollDistance() {
