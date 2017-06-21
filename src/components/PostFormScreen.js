@@ -13,7 +13,7 @@ import {createPost, input, inputDanger,listPosts} from '../states/post-actions';
 import {setToast} from '../states/toast';
 // import {addStorage} from '../api/posts.js';
 import DatePicker from 'react-native-datepicker'
-import {addStorage} from '../states/store-actions';
+// import {addStorage} from '../states/store-actions';
 
 // import {Form,
 //   Separator,InputField, LinkField,
@@ -35,7 +35,7 @@ class PostFormScreen extends React.Component {
         name: PropTypes.string.isRequired,
         category: PropTypes.string.isRequired,
         isRefrige: PropTypes.bool.isRequired,
-        toast: PropTypes.string.isRequired,
+        // toast: PropTypes.string.isRequired,
         dispatch: PropTypes.func.isRequired
     };
     constructor(props){
@@ -132,7 +132,7 @@ class PostFormScreen extends React.Component {
         //         </Content>
         //     </Container>
         // );
-        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl} = this.state;
+        const {inputFoodNameDanger,inputFoodNameEl,inputNoteEl,inputQuantityDanger} = this.state;
         const {name,quantity} = this.state;
         const category = this.props.category;
 
@@ -157,7 +157,7 @@ class PostFormScreen extends React.Component {
                             onChange={this.handleFoodNameChange}/>
                         </Item>
                         <View style={{flexDirection: 'column'}}>
-                            <Item style={{flex:1}}>
+                            <Item style={{flex:1}} error={inputQuantityDanger}>
                                 <Label>數量單位:</Label>
                                 <Input ref='quantity' placeholder='1'
                                   keyboardType="numeric"
@@ -274,7 +274,7 @@ class PostFormScreen extends React.Component {
          </ScrollView>);
     }
     handleGoBack() {
-        this.props.dispatch(listPosts(this.props.isRefrige));
+        // this.props.dispatch(listPosts(this.props.isRefrige));
         this.props.navigation.goBack();
     }
 
@@ -383,70 +383,13 @@ class PostFormScreen extends React.Component {
             alarmTime:this.state.alarmTime,
             text:this.state.text
         }
-        dispatch(createPost(foodDetail));
-        // dispatch(addStorage(foodDetail));
-        dispatch(setToast('Created.'));
-
+        dispatch(createPost(foodDetail)).then(()=>{
+            dispatch(listPosts(foodDetail.isRefrige));
+            dispatch(setToast('Created.'));
+        });
         goBack();
 
-
-            // if(!this.props.isEdit){
-            //     this.props.onPost(this.props.isRefrige,FoodDetail);
-            // }
-            // else{
-            //     this.props.editfunc(this.props.isRefrige,FoodDetail);
-            // }
     }
-
-    // handleGoBack() {
-    //      this.props.navigation.goBack();
-    // }
-    //
-    // handleInputChange(e) {
-    //     const {inputDanger: danger, dispatch} = this.props;
-    //     const inputValue = e.nativeEvent.text;
-    //     if (danger)
-    //         dispatch(inputDanger(false));
-    //     dispatch(input(inputValue));
-    // }
-    //
-    // handleCreatPost() {
-    //     const {mood, inputValue, dispatch} = this.props;
-    //     const {goBack} = this.props.navigation;
-    //
-    //     //ours
-    //
-    //     if (inputValue) {
-    //         const foodInfo={
-    //             category: '',
-    //             name: inputValue,
-    //             quantity: 1,
-    //             unit: 'na',
-    //             isSetDeadline: false,
-    //             deadline: "",
-    //             isAlarm: false,
-    //             alarmDate: "",
-    //             alarmTime: "",
-    //             text: '',
-    //             isRefrige: false,        //need to be changed later
-    //             isTimeOut: false
-    //         }
-    //         addStorage(foodInfo);
-    //         console.log("addStorage");
-    //         goBack();
-    //     }
-    //
-    //     // teacher's
-    //
-    //     // if (inputValue) {
-    //     //     dispatch(createPost(mood, inputValue)).then(() => {
-    //     //         dispatch(setToast('Posted.'));
-    //     //     });
-    //     //     goBack();
-    //     // } else {
-    //     //     dispatch(inputDanger(true));
-    //     // }
-    // }
 }
 
 const styles = {

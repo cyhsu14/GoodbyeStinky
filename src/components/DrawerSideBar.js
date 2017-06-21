@@ -16,7 +16,7 @@ export default class DrawerSideBar extends React.Component {
       return (
         <Container style={styles.drawer}>
             <Image source={require('../images/account-bg.jpg')} style={styles.header}>
-                <Thumbnail large source={require('../images/account.jpg')} />
+                <Thumbnail large source={require('../images/account.png')} />
             </Image>
             <Button block transparent style={styles.item} onPress={() => navigate('Refriger')}>
                 <Icon name='water' style={styles.icon}/>
@@ -49,7 +49,7 @@ const styles = {
         height: 200,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#666',
+
         marginBottom: 16
     },
     item: {

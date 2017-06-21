@@ -72,7 +72,7 @@ const nav = (state = initialState, action) => {
 // Create Redux store
 const store = createStore(combineReducers({
     nav, search, toast,
-    post, postForm, postItem, foodForm, storage
+    post, postItem, foodForm, storage
 }), compose(applyMiddleware(thunkMiddleware, loggerMiddleware)));
 
 export default class App extends React.Component {

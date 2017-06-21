@@ -22,7 +22,9 @@ export default class AboutScreen extends React.Component {
         return (
             <NavigationContainer navigate={navigate} title='About'>
                 <View style={styles.textStyle}>
-                    <Text style={{fontSize:20, fontFamily:'sans-condensed'}}>This app is developed by Bang-kung, Guan-yu, Yi-ting and Ching-yu.</Text>
+                    <Text style={{fontSize:20, fontFamily:'sans-condensed'}}>
+                        This app is developed by Bang-kang, Guan-yu, Yi-ting and Ching-yu.
+                    </Text>
                 </View>
             </NavigationContainer>
         );

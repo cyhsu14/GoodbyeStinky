@@ -7,9 +7,9 @@
 // Production server URL
 import uuid from 'uuid/v4';
 import {AsyncStorage, AsyncString} from 'react-native';
-
+import moment from 'moment';
 export function listStorages(isRefrige) {
-    
+
     if(isRefrige == true){
         return AsyncStorage.getItem("refrige").then(p =>{
             let posts = p ? JSON.parse(p) : [];
@@ -38,26 +38,29 @@ export function addStorage(foodInfo){
 
     let storages;
     if(foodInfo.isRefrige == true){
-        AsyncStorage.getItem("refrige").then(p =>{
+        return AsyncStorage.getItem("refrige").then(p =>{
             let posts = p ? JSON.parse(p) : [];
             storages=[
                 ...posts,
                 newStorage
             ];
-            AsyncStorage.setItem("refrige", JSON.stringify(storages));
-            // console.log(storages);
+            return AsyncStorage.setItem("refrige", JSON.stringify(storages));
+
         });
+
     }
     else{
-        AsyncStorage.getItem("freezer").then(p =>{
-        let posts = p ? JSON.parse(p) : [];
-        storages=[
-            ...posts,
-            newStorage
-        ];
-        AsyncStorage.setItem("freezer", JSON.stringify(storages));
+        return AsyncStorage.getItem("freezer").then(p =>{
+            let posts = p ? JSON.parse(p) : [];
+            storages=[
+                ...posts,
+                newStorage
+            ];
+            return AsyncStorage.setItem("freezer", JSON.stringify(storages));
+
+        });
         // console.log(storages);
-    });
+
     }
 
 }

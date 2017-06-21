@@ -7,22 +7,21 @@ import {Container, Fab, Button, Toast} from 'native-base';
 import appColors from '../styles/colors';
 import appMetrics from '../styles/metrics';
 import {getFoodIcon} from '../utilities/foodModal.js';
-import ParallaxNavigationContainer from './ParallaxNavigationContainer';
 import PostList from './PostList';
 import PostItem from './PostItem';
-import WeatherDisplay from './WeatherDisplay';
 import NavigationContainer from './NavigationContainer';
 
 import {clearStorages} from '../api/posts.js';
 
 import {connect} from 'react-redux';
-import {selectFood,listStorages} from '../states/store-actions';
+import {selectFood} from '../states/store-actions';
 import {setToast} from '../states/toast';
-
+import {listPosts} from '../states/post-actions';
 // import dismissKeyboard from 'dismissKeyboard';
 // dismissKeyboard();
 class RefrigerScreen extends React.Component {
     static propTypes = {
+        creatingPost: PropTypes.bool.isRequired,
         toast: PropTypes.string.isRequired,
         dispatch: PropTypes.func.isRequired
     };
@@ -40,10 +39,10 @@ class RefrigerScreen extends React.Component {
         this.handleIcon = this.handleIcon.bind(this);
         this.getIconList = this.getIconList.bind(this);
     }
-    // componentDidMount(){
-    //     const {dispatch} = this.props;
-    //     dispatch(listStorages(true));
-    // }
+    componentDidMount(){
+        const {dispatch} = this.props;
+        dispatch(listPosts(true));
+    }
     componentWillReceiveProps(nextProps) {
         if (nextProps.toast) {
             Toast.show({
@@ -52,32 +51,12 @@ class RefrigerScreen extends React.Component {
                 duration: appMetrics.toastDuration
             });
             this.props.dispatch(setToast(''));
+            // this.props.dispatch(listPosts(this.props.isRefrige));
         }
     }
-// <ParallaxNavigationContainer
-//                 navigate={navigate}
-//                 title='Refriger'
-//                 titleLeft={80}
-//                 titleTop={40}
-//                 renderHeaderContent={props => <WeatherDisplay {...props} />}
-//                 renderScroller={props => <PostList scrollProps={props} />}>
-//                 {this.state.fabActive &&
-//                     <TouchableWithoutFeedback onPress={this.handleFabClose}>
-//                         <View style={styles.fabMask}/>
-//                     </TouchableWithoutFeedback>
-//                 }
-//                 <Fab
-//                     active={this.state.fabActive}
-//                     containerStyle={styles.fabContainer}
-//                     style={styles.fab}
-//                     position="bottomRight"
-//                     onPress={() => this.handleCreatePost('Clear')}>
-//                     <Icon name='pencil' />
-//                 </Fab>
-//             </ParallaxNavigationContainer>
+
     render() {
         const {navigate} = this.props.navigation;
-
         return (
             <NavigationContainer navigate={navigate} title='Refriger'>
                 <View style={{flex: 1, justifyContent: 'center'}}>
@@ -102,7 +81,7 @@ class RefrigerScreen extends React.Component {
                 containerStyle={styles.fabContainer}
                 style={styles.fab}
                 position="bottomLeft"
-                onPress={() => clearStorages(true)}>
+                onPress={() => {clearStorages(true);this.props.dispatch(listPosts(true));}}>
                     <Icon name="question" />
                 </Fab>
 
@@ -328,5 +307,6 @@ const styles = {
 };
 
 export default connect((state, ownProps) => ({
+    creatingPost: state.post.creatingPost,
     toast: state.toast
 }))(RefrigerScreen);

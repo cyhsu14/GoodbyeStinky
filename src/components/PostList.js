@@ -84,6 +84,7 @@ class PostList extends React.Component {
     }
 
     componentDidMount() {
+        // console.log("in");
         this.props.dispatch(listPosts(this.props.isRefrige)); //need to be changed later
     }
 
@@ -91,18 +92,21 @@ class PostList extends React.Component {
         const {dispatch, posts} = this.props;
         // if (searchText !== nextProps.searchText) {
         //     dispatch(listPosts(this.props.isRefrige));       //need to be changed later
-        // }
+        // } this.props.dispatch(listPosts(this.props.isRefrige));
         if (posts !== nextProps.posts) {
             // console.log("next");
             // console.log(nextProps.posts);
+
             this.setState({
                 dataSource: this.state.dataSource.cloneWithRows(nextProps.posts)
             });
+
         }
     }
 
     render() {
-        const {listingPosts, hasMorePosts, posts, scrollProps} = this.props;
+        const {listingPosts, posts, scrollProps} = this.props;
+        // this.props.dispatch(listPosts(this.props.isRefrige));
         console.log("in postlist!~~");
         console.log(posts);
         // console.log("in postlist!~~");
@@ -118,8 +122,8 @@ class PostList extends React.Component {
                     return <PostItem {...p} />;
                 }}
                 contentContainerStyle={styles.list}
-                ref={(el) => this.listEl = el}
-                {...scrollProps}
+                // ref={(el) => this.listEl = el}
+                // {...scrollProps}
             />
             );
         }
@@ -134,8 +138,7 @@ class PostList extends React.Component {
     }
 
     handleRefresh() {
-        const {dispatch} = this.props;
-        dispatch(listPosts(this.props.isRefrige));      //need to be changed later
+        this.props.dispatch(listPosts(this.props.isRefrige));      //need to be changed later
     }
 
     // handleLoadMore() {
@@ -165,6 +168,7 @@ const styles = StyleSheet.create({
 export default connect((state, ownProps) => ({
     // searchText: state.search.searchText,
     listingPosts: state.post.listingPosts,
+    creatingPost: state.post.creatingPost,
     // listingMorePosts: state.post.listingMorePosts,
     posts: state.post.posts
     // hasMorePosts: state.post.hasMore

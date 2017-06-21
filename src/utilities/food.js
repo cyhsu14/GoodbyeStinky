@@ -154,7 +154,7 @@ export function getFoodIcon(group) {
         // case '':
         //     return<Image source={require('../images/.png')} style={styles.moodIcon}>
                     // </Image>;
-        case '辣醬':
+        case '辣椒醬':
             return<Image source={require('../images/chilisauce.png')} style={styles.moodIcon}></Image>;
         case '果醬':
             return<Image source={require('../images/jam.png')} style={styles.moodIcon}></Image>;
